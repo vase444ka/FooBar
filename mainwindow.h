@@ -14,8 +14,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
+public slots:
+    void clikkk(bool);
 private:
     Ui::MainWindow *ui;
+    int cnt = 0;
 };
 #endif // MAINWINDOW_H
