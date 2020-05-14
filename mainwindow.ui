@@ -31,15 +31,28 @@
       <enum>QLayout::SetMinimumSize</enum>
      </property>
      <item>
-      <widget class="QGraphicsView" name="player2View"/>
+      <widget class="QGraphicsView" name="player1View"/>
      </item>
      <item>
       <widget class="QGraphicsView" name="fieldView"/>
      </item>
      <item>
-      <widget class="QGraphicsView" name="player1View"/>
+      <widget class="QGraphicsView" name="player2View"/>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="turnButton">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>90</y>
+      <width>112</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Click</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

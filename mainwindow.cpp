@@ -1,24 +1,51 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+void MainWindow::makeTurn(){
+    if (currentTurn >= turns.size()) return;
+    turn t = turns[currentTurn];
+    if (currentTurn&1)
+    {
+        if (t.xPlayer>=0)
+            player2->setRect(field[t.yPlayer][t.xPlayer]);
+        if (t.beginWall.x()>=0){
+            p2Walls[p2CurrWall]->setLine
+                    (t.beginWall.x()*cellSize, t.beginWall.y()*cellSize,
+                     t.endWall.x()*cellSize, t.endWall.y()*cellSize);
+            fieldScene->addItem(p2Walls[p2CurrWall]);
+            p2CurrWall--;
+        }
+    }
+    if (!(currentTurn&1))
+    {
+        if (t.xPlayer>=0)
+            player1->setRect(field[t.yPlayer][t.xPlayer]);
+        if (t.beginWall.x()>=0){
+            p1Walls[p1CurrWall]->setLine
+                    (t.beginWall.x()*cellSize, t.beginWall.y()*cellSize,
+                     t.endWall.x()*cellSize, t.endWall.y()*cellSize);
+            fieldScene->addItem(p1Walls[p1CurrWall]);
+            p1CurrWall--;
+        }
+    }
+    currentTurn++;
+}
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(std::vector <turn> &t, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , cellSize(50)
-    , cellCount(9)
     , margin(1)
-    , wallsCount(10)
 {
     ui->setupUi(this);
     ui->verticalLayout->setSpacing(0);
+    currentTurn = 0;
+    turns = std::move(t);
     fieldScene = new QGraphicsScene;
     p1Scene = new QGraphicsScene;
     p2Scene = new QGraphicsScene;
     fieldView = ui->fieldView;
     player1View = ui->player1View;
     player2View = ui->player2View;
-
 
     fieldView->setFixedSize(cellSize*cellCount + margin*2, cellSize*cellCount + margin*2);
     fieldView->setScene(fieldScene);
@@ -33,7 +60,6 @@ MainWindow::MainWindow(QWidget *parent)
     p2Scene->setSceneRect(0, 0, player2View->width()-margin*2, player2View->height()-margin*2);
 
     QPen blackPen(Qt::black);
-    QRect field[cellCount][cellCount];
     for (int i = 0; i < cellCount; i++)
         for (int j = 0; j < cellCount; j++){
             field[i][j].setRect(j*cellSize, i*cellSize, cellSize, cellSize);
@@ -42,29 +68,28 @@ MainWindow::MainWindow(QWidget *parent)
 
     QBrush p1Brush(Qt::red);
     QBrush p2Brush(Qt::green);
-    QGraphicsEllipseItem* player1 = fieldScene->addEllipse
+    player1 = fieldScene->addEllipse
             (field[0][cellCount/2], blackPen, p1Brush);
-    player1->setFlag(QGraphicsItem::ItemIsMovable, true);
-    QGraphicsEllipseItem* player2 = fieldScene->addEllipse
+    player2 = fieldScene->addEllipse
             (field[cellCount - 1][cellCount/2], blackPen, p2Brush);
-    player2->setFlag(QGraphicsItem::ItemIsMovable, true);
-
 
     QPen bluePen(Qt::blue);
     bluePen.setWidth(6);
-    QGraphicsLineItem *p1Walls[wallsCount], *p2Walls[wallsCount];
-    int x = 0;
+    int x = 0; p1CurrWall = p2CurrWall = wallsCount - 1;
     for (int i = 0; i < wallsCount; i++, x+=cellSize){
         p1Walls[i] = p1Scene->addLine(x, 0, x, p1Scene->height(), bluePen);
         p2Walls[i] = p2Scene->addLine(x, 0, x, p1Scene->height(), bluePen);
-
-        p1Walls[i]->setFlag(QGraphicsItem::ItemIsMovable, true);
-        p2Walls[i]->setFlag(QGraphicsItem::ItemIsMovable, true);
     }
 
     player1View->show();
     fieldView->show();
     player2View->show();
+
+    for (int i = 0; i<turns.size(); i++)
+        std::cout<<turns[i].xPlayer<<'*'<<turns[i].yPlayer<<'*'<<turns[i].endWall.x()<<std::endl;
+
+    if (turns.size())
+        QObject::connect(ui->turnButton, SIGNAL(clicked()), this, SLOT(makeTurn()));
 }
 
 MainWindow::~MainWindow()
