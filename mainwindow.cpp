@@ -31,6 +31,15 @@ void MainWindow::makeTurn(){
     currentTurn++;
 }
 
+void MainWindow::timerOn(){
+    timer->start(500);
+}
+
+void MainWindow::timerOff(){
+    timer->stop();
+    makeTurn();
+}
+
 MainWindow::MainWindow(std::vector <turn> &t, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -39,6 +48,7 @@ MainWindow::MainWindow(std::vector <turn> &t, QWidget *parent)
     ui->setupUi(this);
     ui->verticalLayout->setSpacing(0);
     currentTurn = 0;
+    timer = new QTimer(this);
     turns = std::move(t);
     fieldScene = new QGraphicsScene;
     p1Scene = new QGraphicsScene;
@@ -85,11 +95,11 @@ MainWindow::MainWindow(std::vector <turn> &t, QWidget *parent)
     fieldView->show();
     player2View->show();
 
-    for (int i = 0; i<turns.size(); i++)
-        std::cout<<turns[i].xPlayer<<'*'<<turns[i].yPlayer<<'*'<<turns[i].endWall.x()<<std::endl;
-
-    if (turns.size())
-        QObject::connect(ui->turnButton, SIGNAL(clicked()), this, SLOT(makeTurn()));
+    if (turns.size()){
+        QObject::connect(ui->turnButton, SIGNAL(clicked()), this, SLOT(timerOff()));
+        QObject::connect(ui->timerButton, SIGNAL(clicked()), this, SLOT(timerOn()));
+        QObject::connect(timer, SIGNAL(timeout()), this, SLOT(makeTurn()));
+    }
 }
 
 MainWindow::~MainWindow()

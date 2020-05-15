@@ -25,6 +25,8 @@ public:
 
 public slots:
     void makeTurn();
+    void timerOn();
+    void timerOff();
 
 private:
     Ui::MainWindow *ui;

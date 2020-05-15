@@ -41,18 +41,31 @@
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="turnButton">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>510</x>
       <y>90</y>
-      <width>112</width>
-      <height>34</height>
+      <width>114</width>
+      <height>76</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Click</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QPushButton" name="turnButton">
+       <property name="text">
+        <string>Move by click</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="timerButton">
+       <property name="text">
+        <string>Move by timer</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
