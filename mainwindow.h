@@ -30,17 +30,18 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsView *fieldView, *player1View, *player2View;
     QTimer *timer;
-    QGraphicsScene *fieldScene, *p1Scene, *p2Scene;
+
+    QGraphicsScene *fieldScene;
+    int currentTurn;
+    std::vector <turn> turns;
     const int margin;
     static const int cellCount = 9, wallsCount = 10, cellSize = 50;
-
     QRect field[cellCount][cellCount];
-    QGraphicsLineItem *p1Walls[wallsCount], *p2Walls[wallsCount];
 
-    int currentTurn, p1CurrWall, p2CurrWall;
-    std::vector <turn> turns;
+    QGraphicsScene *p1Scene, *p2Scene;
+    QGraphicsLineItem *p1Walls[wallsCount], *p2Walls[wallsCount];
     QGraphicsEllipseItem *player1, *player2;
+    int p1CurrWall, p2CurrWall;
 };
 #endif // MAINWINDOW_H

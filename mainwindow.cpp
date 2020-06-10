@@ -46,28 +46,25 @@ MainWindow::MainWindow(std::vector <turn> &t, QWidget *parent)
     , margin(1)
 {
     ui->setupUi(this);
-    ui->verticalLayout->setSpacing(0);
     currentTurn = 0;
     timer = new QTimer(this);
     turns = std::move(t);
     fieldScene = new QGraphicsScene;
     p1Scene = new QGraphicsScene;
     p2Scene = new QGraphicsScene;
-    fieldView = ui->fieldView;
-    player1View = ui->player1View;
-    player2View = ui->player2View;
+    ui->fieldView->scale(1, -1);
 
-    fieldView->setFixedSize(cellSize*cellCount + margin*2, cellSize*cellCount + margin*2);
-    fieldView->setScene(fieldScene);
-    fieldScene->setSceneRect(0, 0, fieldView->width()-margin*2, fieldView->height()-margin*2);
+    ui->fieldView->setFixedSize(cellSize*cellCount + margin*2, cellSize*cellCount + margin*2);
+    ui->fieldView->setScene(fieldScene);
+    fieldScene->setSceneRect(0, 0, ui->fieldView->width()-margin*2, ui->fieldView->height()-margin*2);
 
-    player1View->setFixedSize(cellSize*cellCount + margin*2, cellSize*2 + margin*2);
-    player1View->setScene(p1Scene);
-    p1Scene->setSceneRect(0, 0, player1View->width()-margin*2, player1View->height()-margin*2);
+    ui->player1View->setFixedSize(cellSize*cellCount + margin*2, cellSize*2 + margin*2);
+    ui->player1View->setScene(p1Scene);
+    p1Scene->setSceneRect(0, 0, ui->player1View->width()-margin*2, ui->player1View->height()-margin*2);
 
-    player2View->setFixedSize(cellSize*cellCount + margin*2, cellSize*2 + margin*2);
-    player2View->setScene(p2Scene);
-    p2Scene->setSceneRect(0, 0, player2View->width()-margin*2, player2View->height()-margin*2);
+    ui->player2View->setFixedSize(cellSize*cellCount + margin*2, cellSize*2 + margin*2);
+    ui->player2View->setScene(p2Scene);
+    p2Scene->setSceneRect(0, 0, ui->player2View->width()-margin*2, ui->player2View->height()-margin*2);
 
     QPen blackPen(Qt::black);
     for (int i = 0; i < cellCount; i++)
@@ -90,10 +87,6 @@ MainWindow::MainWindow(std::vector <turn> &t, QWidget *parent)
         p1Walls[i] = p1Scene->addLine(x, 0, x, p1Scene->height(), bluePen);
         p2Walls[i] = p2Scene->addLine(x, 0, x, p1Scene->height(), bluePen);
     }
-
-    player1View->show();
-    fieldView->show();
-    player2View->show();
 
     if (turns.size()){
         QObject::connect(ui->turnButton, SIGNAL(clicked()), this, SLOT(timerOff()));
