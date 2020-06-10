@@ -1,98 +1,21 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-void MainWindow::makeTurn(){
-    if (currentTurn >= turns.size()) return;
-    turn t = turns[currentTurn];
-    if (currentTurn&1)
-    {
-        if (t.xPlayer>=0)
-            player2->setRect(field[t.yPlayer][t.xPlayer]);
-        if (t.beginWall.x()>=0){
-            p2Walls[p2CurrWall]->setLine
-                    (t.beginWall.x()*cellSize, t.beginWall.y()*cellSize,
-                     t.endWall.x()*cellSize, t.endWall.y()*cellSize);
-            fieldScene->addItem(p2Walls[p2CurrWall]);
-            p2CurrWall--;
-        }
-    }
-    if (!(currentTurn&1))
-    {
-        if (t.xPlayer>=0)
-            player1->setRect(field[t.yPlayer][t.xPlayer]);
-        if (t.beginWall.x()>=0){
-            p1Walls[p1CurrWall]->setLine
-                    (t.beginWall.x()*cellSize, t.beginWall.y()*cellSize,
-                     t.endWall.x()*cellSize, t.endWall.y()*cellSize);
-            fieldScene->addItem(p1Walls[p1CurrWall]);
-            p1CurrWall--;
-        }
-    }
-    currentTurn++;
-}
-
-void MainWindow::timerOn(){
-    timer->start(500);
-}
-
-void MainWindow::timerOff(){
-    timer->stop();
-    makeTurn();
-}
-
-MainWindow::MainWindow(std::vector <turn> &t, QWidget *parent)
+MainWindow::MainWindow(GameLog passed_log, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , margin(1)
 {
     ui->setupUi(this);
-    currentTurn = 0;
-    timer = new QTimer(this);
-    turns = std::move(t);
-    fieldScene = new QGraphicsScene;
-    p1Scene = new QGraphicsScene;
-    p2Scene = new QGraphicsScene;
+    _field_scene = new BattleScene;
+    _p1_scene = new LootScene;
+    _p2_scene = new LootScene;
     ui->fieldView->scale(1, -1);
 
-    ui->fieldView->setFixedSize(cellSize*cellCount + margin*2, cellSize*cellCount + margin*2);
-    ui->fieldView->setScene(fieldScene);
-    fieldScene->setSceneRect(0, 0, ui->fieldView->width()-margin*2, ui->fieldView->height()-margin*2);
+    ui->fieldView->setScene(_field_scene);
+    ui->player1View->setScene(_p1_scene);
+    ui->player2View->setScene(_p2_scene);//TODO OVERLAP
 
-    ui->player1View->setFixedSize(cellSize*cellCount + margin*2, cellSize*2 + margin*2);
-    ui->player1View->setScene(p1Scene);
-    p1Scene->setSceneRect(0, 0, ui->player1View->width()-margin*2, ui->player1View->height()-margin*2);
-
-    ui->player2View->setFixedSize(cellSize*cellCount + margin*2, cellSize*2 + margin*2);
-    ui->player2View->setScene(p2Scene);
-    p2Scene->setSceneRect(0, 0, ui->player2View->width()-margin*2, ui->player2View->height()-margin*2);
-
-    QPen blackPen(Qt::black);
-    for (int i = 0; i < cellCount; i++)
-        for (int j = 0; j < cellCount; j++){
-            field[i][j].setRect(j*cellSize, i*cellSize, cellSize, cellSize);
-            fieldScene->addRect(field[i][j], blackPen);
-        }
-
-    QBrush p1Brush(Qt::red);
-    QBrush p2Brush(Qt::green);
-    player1 = fieldScene->addEllipse
-            (field[0][cellCount/2], blackPen, p1Brush);
-    player2 = fieldScene->addEllipse
-            (field[cellCount - 1][cellCount/2], blackPen, p2Brush);
-
-    QPen bluePen(Qt::blue);
-    bluePen.setWidth(6);
-    int x = 0; p1CurrWall = p2CurrWall = wallsCount - 1;
-    for (int i = 0; i < wallsCount; i++, x+=cellSize){
-        p1Walls[i] = p1Scene->addLine(x, 0, x, p1Scene->height(), bluePen);
-        p2Walls[i] = p2Scene->addLine(x, 0, x, p1Scene->height(), bluePen);
-    }
-
-    if (turns.size()){
-        QObject::connect(ui->turnButton, SIGNAL(clicked()), this, SLOT(timerOff()));
-        QObject::connect(ui->timerButton, SIGNAL(clicked()), this, SLOT(timerOn()));
-        QObject::connect(timer, SIGNAL(timeout()), this, SLOT(makeTurn()));
-    }
+    setGameInstance(passed_log);
 }
 
 MainWindow::~MainWindow()
@@ -100,3 +23,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::setGameInstance(GameLog g_log){
+    _curr_game = GameInstance(g_log, _field_scene, _p1_scene, _p2_scene);
+}

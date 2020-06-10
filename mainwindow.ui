@@ -34,7 +34,11 @@
       <widget class="QGraphicsView" name="player2View"/>
      </item>
      <item>
-      <widget class="QGraphicsView" name="fieldView"/>
+      <widget class="QGraphicsView" name="fieldView">
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QGraphicsView" name="player1View"/>
