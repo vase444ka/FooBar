@@ -23,9 +23,6 @@ public:
     ~MainWindow();
     void setGameInstance(GameLog g_log);
 
-private slots:
-    void on_turnButton_clicked();
-
 private:
     Ui::MainWindow *ui;
     BattleScene *_field_scene;

@@ -16,6 +16,7 @@
 class Player
 {
 public:
+    Player();
     Player(BattleScene* battle_scene, LootScene* loot_scene, bool is_second = false);
     void makeTurn(TurnLog log);
 private:

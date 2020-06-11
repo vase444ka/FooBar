@@ -5,16 +5,20 @@ Player::Player(BattleScene* battle_scene, LootScene* loot_scene, bool is_second)
     ,_loot_scene(loot_scene)
     ,_curr_wall(0)
 {
-    QBrush brush(QColor::fromRgb(45, 45, 0));
+    if (!battle_scene || !loot_scene)
+        return;
+
+    QBrush red_brush(Qt::red);
+    QBrush green_brush(Qt::green);
     QPen black_pen(Qt::black);
     QPen blue_pen(Qt::blue);
 
     if (is_second)
         _chip = _battle_scene->addEllipse
-                (_battle_scene->getCell(_battle_scene->getCellN(), battle_scene->getCellN()/2), black_pen, brush);
+                (_battle_scene->getCell(_battle_scene->getCellN() - 1, battle_scene->getCellN()/2), black_pen, red_brush);
     else
         _chip = _battle_scene->addEllipse
-                (_battle_scene->getCell(0, _battle_scene->getCellN()/2), black_pen, brush);
+                (_battle_scene->getCell(0, _battle_scene->getCellN()/2), black_pen, green_brush);
     blue_pen.setWidth(6);
 
     for (int i = 0, x = 0; i < battle_scene->getWallN(); i++, x+=battle_scene->getCellSize()){

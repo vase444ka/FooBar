@@ -14,6 +14,7 @@ class TurnLog
 {
 public:
     TurnLog();//TODO
+    TurnLog(int, int, std::pair<QPoint, QPoint> = {{0,0},{0,0}}, bool is_wall = false);
     ~TurnLog(){}
     int getChipX() const;
     int getChipY() const;
@@ -25,7 +26,7 @@ private:
 
 class GameLog{
 public:
-    GameLog();//TODO
+    GameLog(std::vector <TurnLog>, std::string, std::string);
     TurnLog getTurn(int);
     int getSize();
 private:
