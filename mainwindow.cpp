@@ -18,7 +18,7 @@ MainWindow::MainWindow(GameLog passed_log, QWidget *parent)
     ui->player1View->setScene(_p1_scene);
     ui->player2View->setScene(_p2_scene);//TODO OVERLAP
 
-    //_curr_game.connectControls(ui->turnButton, ui->timerButton);
+    _curr_game.connectControls(ui->turnButton, ui->timerButton);
 }
 
 MainWindow::~MainWindow()
