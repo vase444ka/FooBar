@@ -16,22 +16,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    Player.cpp \
-    customscenes.cpp \
-    gameinstance.cpp \
-    logs.cpp \
-    main.cpp \
-    mainwindow.cpp
+    sources/Player.cpp \
+    sources/customscenes.cpp \
+    sources/gameinstance.cpp \
+    sources/logs.cpp \
+    sources/main.cpp \
+    sources/mainwindow.cpp
 
 HEADERS += \
-    Player.h \
-    customscenes.h \
-    gameinstance.h \
-    logs.h \
-    mainwindow.h
+    headers/Player.h \
+    headers/customscenes.h \
+    headers/gameinstance.h \
+    headers/logs.h \
+    headers/mainwindow.h
 
 FORMS += \
-    mainwindow.ui
+    forms/mainwindow.ui
 
 TRANSLATIONS += \
     FooBar_en_AU.ts
@@ -40,6 +40,3 @@ TRANSLATIONS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-DISTFILES += \
-    input.txt
