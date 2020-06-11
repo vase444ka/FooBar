@@ -56,12 +56,14 @@ void GameLog::parse(std::string filename){
     std::string buffer;
     in.open(filename);
 
-    _turns.push_back(TurnLog(0,4));
-    _turns.push_back(TurnLog(8,4));
+    _turns.push_back(TurnLog(4, 0));
+    _turns.push_back(TurnLog(4, 8));
 
+    int i = 2;
     while(getline(in, buffer)){
-        _turns.push_back(TurnLog(buffer, _turns[1]));
+        _turns.push_back(TurnLog(buffer, _turns[i-2]));
         std::cout<<_turns[_turns.size()-1].getChipX()<<" "<<_turns[_turns.size()-1].getChipY()<<std::endl;
+        i++;
     }
     in.close();
 }

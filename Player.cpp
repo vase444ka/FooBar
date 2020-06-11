@@ -45,7 +45,7 @@ void Player::setWall(std::pair <QPoint, QPoint> coord){
 }
 
 void Player::makeTurn(TurnLog log){
-    moveChip(_battle_scene->getCell(log.getChipX(), log.getChipY()));
+    moveChip(_battle_scene->getCell( log.getChipY(), log.getChipX()));
     if (log.getWall()){
         setWall(log.getWall().value());
     }
