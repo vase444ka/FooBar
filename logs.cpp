@@ -12,6 +12,24 @@ TurnLog::TurnLog(int chip_x, int chip_y, std::pair<QPoint, QPoint> wall_coords, 
         _wall = wall_coords;
 }
 
+TurnLog::TurnLog(std::string inp, const TurnLog &prev)
+{
+    std::stringstream in;
+    in<<inp;
+    std::string turnMode;
+    in >> turnMode;
+        if (turnMode[0] == 'm'){
+            in >> _y_chip>>_x_chip;
+            _y_chip--; _x_chip--;
+        }
+        else{
+            (*this) = prev;
+            int y1, x1, y2, x2;
+            in>>y1>>x1>>y2>>x2;
+            _wall = {{x1-1, y1-1}, {x2-1, y2-1}};
+        }
+}
+
 int TurnLog::getChipX() const
 {
     return _x_chip;
@@ -30,6 +48,22 @@ std::optional<std::pair<QPoint, QPoint>> TurnLog::getWall() const
 GameLog::GameLog(std::vector<TurnLog> log, std::string name1, std::string name2){
     _turns = std::move(log);
     _team_names = {name1, name2};
+}
+
+void GameLog::parse(std::string filename){
+    _turns.clear();
+    std::ifstream in;
+    std::string buffer;
+    in.open(filename);
+
+    _turns.push_back(TurnLog(0,4));
+    _turns.push_back(TurnLog(8,4));
+
+    while(getline(in, buffer)){
+        _turns.push_back(TurnLog(buffer, _turns[1]));
+        std::cout<<_turns[_turns.size()-1].getChipX()<<" "<<_turns[_turns.size()-1].getChipY()<<std::endl;
+    }
+    in.close();
 }
 
 TurnLog GameLog::getTurn(int n){

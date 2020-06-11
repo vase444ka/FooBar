@@ -8,6 +8,8 @@
 #include <QPoint>
 #include <QtCore>
 #include <QtDebug>
+#include <string>
+#include <sstream>
 
 
 class TurnLog
@@ -15,6 +17,7 @@ class TurnLog
 public:
     TurnLog();//TODO
     TurnLog(int, int, std::pair<QPoint, QPoint> = {{0,0},{0,0}}, bool is_wall = false);
+    TurnLog(std::string, const TurnLog &prev = TurnLog(0,0));
     ~TurnLog(){}
     int getChipX() const;
     int getChipY() const;
@@ -26,7 +29,9 @@ private:
 
 class GameLog{
 public:
+    GameLog(){}
     GameLog(std::vector <TurnLog>, std::string, std::string);
+    void parse(std::string filename);
     TurnLog getTurn(int);
     int getSize();
 private:
